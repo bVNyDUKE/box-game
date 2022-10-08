@@ -1,7 +1,7 @@
 :root {
-  --primary: rgb(45, 45, 45);
+  --primary: rgb(65, 65, 65);
   --bg-primary: white;
-  --line-width: 5px;
+  --line-width: 2px;
 }
 
 .App {
@@ -18,12 +18,6 @@
   place-items: center;
   box-sizing: border-box;
   position: relative;
-  height: 400px;
-  width: 450px;
-}
-
-.gameRow {
-  position: absolute;
 }
 
 .box {
@@ -63,4 +57,13 @@
 .line:hover {
   background-color: red;
   cursor: pointer;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  border-radius: 100%;
+  background-color: gray;
+  z-index: 20;
 }
