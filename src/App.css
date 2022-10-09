@@ -1,9 +1,9 @@
 :root {
   /* --primary: rgb(65, 65, 65); */
   --primary: rgb(230, 230, 230);
-  --p1-color: rgb(0, 255, 153);
-  --p2-color: rgb(0, 102, 255);
-  --circle-color: rgb(255, 177, 208);
+  --p1-color: rgb(82, 67, 142);
+  --p2-color: rgb(67, 142, 82);
+  --circle-color: rgb(0, 0, 0);
   --line-hover-color: rgb(0, 0, 0, 0.1);
   --line-width: 10px;
 }
