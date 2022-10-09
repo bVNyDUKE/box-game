@@ -20,3 +20,5 @@
 - [ ] Start screen
 - [ ] Win conditions
 - [ ] Server integration
+- [ ] Update game rules
+  - [ ] Last to close a box scores
