@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useMemo, useReducer } from 'react';
 import './App.css';
 import { BoxData, ACTIONTYPE, reducer, STATE } from './state';
 
@@ -20,7 +20,7 @@ const Box: React.FC<{
 
   const lineActive = (lineId: number) => boxActiveLines.includes(lineId);
 
-  const boxWonBy = () => {
+  const boxWonBy = useMemo(() => {
     const p1 =
       playerLines.p1.filter((id: number) => Object.values(data).includes(id)).length ===
       4;
@@ -36,8 +36,8 @@ const Box: React.FC<{
       return 'p2';
     }
 
-    return;
-  };
+    return '';
+  }, [playerLines]);
 
   const playerClass = (lineId: number) => {
     if (lineActive(lineId)) {
@@ -54,7 +54,7 @@ const Box: React.FC<{
   };
 
   return (
-    <div className={`box ${boxWonBy()}`} style={{ left }}>
+    <div className={`box ${boxWonBy}`} style={{ left }}>
       <div
         className={`side ${playerClass(data.left)}`}
         onClick={() => handleLineClick(data.left)}
@@ -72,10 +72,14 @@ const Box: React.FC<{
         onClick={() => handleLineClick(data.bottom)}
       />
 
-      <div className="circle" style={{ top: '-4px', left: '-4px' }} />
-      <div className="circle" style={{ top: '-4px', right: '-4px' }} />
-      <div className="circle" style={{ bottom: '-4px', right: '-4px' }} />
-      <div className="circle" style={{ bottom: '-4px', left: '-4px' }} />
+      {boxWonBy === '' && (
+        <>
+          <div className="circle top-left" />
+          <div className="circle top-right" />
+          <div className="circle bottom-left" />
+          <div className="circle bottom-right" />
+        </>
+      )}
     </div>
   );
 };
