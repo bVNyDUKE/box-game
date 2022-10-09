@@ -1,21 +1,26 @@
 import './App.css';
+import { BoxData, makeInitialState } from './state';
 
-const GAME = {
-  cols: 10,
-  rows: 10,
-  boxSize: 80,
-  lineWidth: 2,
-};
+const BOXSIZE = 80;
+const LINEWIDTH = 2;
 
-const Box: React.FC<{ col: number; row: number }> = ({ col, row }) => {
-  const left = col * (GAME.boxSize - GAME.lineWidth);
+const Box: React.FC<{ col: number; row: number; data: BoxData }> = ({
+  col,
+  row,
+  data,
+}) => {
+  const left = col * (BOXSIZE - LINEWIDTH);
   const sideOpacity = col === 0 ? 100 : 0;
   const topOpacity = row > 0 ? 0 : 100;
 
   return (
     <div className="box" style={{ left }}>
-      <div className="side line" style={{ opacity: sideOpacity, zIndex: sideOpacity }} />
-      <div className="side line" />
+      <div
+        className="side line"
+        style={{ opacity: sideOpacity, zIndex: sideOpacity }}
+        onClick={() => console.log(data.left)}
+      />
+      <div className="side line" onClick={() => console.log(data.right)} />
       <div className="top line" style={{ opacity: topOpacity, zIndex: topOpacity }} />
       <div className="bottom line" />
       <div className="circle" style={{ top: '-4px', left: '-4px' }} />
@@ -26,28 +31,28 @@ const Box: React.FC<{ col: number; row: number }> = ({ col, row }) => {
   );
 };
 
-const Row: React.FC<{ row: number }> = ({ row, children }) => {
-  const width = GAME.boxSize * GAME.cols;
-  const top = row * (GAME.boxSize - GAME.lineWidth) + 8;
+const Row: React.FC<{ row: number; cols: number }> = ({ row, cols, children }) => {
+  const width = BOXSIZE * cols;
+  const top = row * (BOXSIZE - LINEWIDTH) + 8;
 
   return <div style={{ position: 'absolute', width, top }}>{children}</div>;
 };
 
 function App() {
-  const { boxSize, cols, rows } = GAME;
-  const width = boxSize * cols;
-  const height = boxSize * cols;
+  const cols = 10;
+  const rows = 10;
 
-  const rowArr = new Array(rows).fill('');
-  const colArr = new Array(cols).fill('');
+  const width = BOXSIZE * cols;
+  const height = BOXSIZE * cols;
+  const rowArr = makeInitialState(cols, rows);
 
   return (
     <div className="App">
       <div className="gameArea" style={{ width, height }}>
-        {rowArr.map((_, row) => (
-          <Row key={row} row={row}>
-            {colArr.map((_, col) => (
-              <Box key={col} col={col} row={row} />
+        {rowArr.map((col, rowIndex) => (
+          <Row key={rowIndex} row={rowIndex} cols={cols}>
+            {col.map((boxData, colIndex) => (
+              <Box key={colIndex} data={boxData} col={colIndex} row={rowIndex} />
             ))}
           </Row>
         ))}
