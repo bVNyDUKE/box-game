@@ -5,11 +5,10 @@ export type BoxData = {
   left: number;
 };
 
-export function makeInitialState(cols: number, rows: number): BoxData[][] {
+export function makeGameField(cols: number, rows: number): BoxData[][] {
   const rowArr: BoxData[][] = [];
   let id = 0;
 
-  //write a test for this
   for (let r = 0; r < rows; r++) {
     const colArr: BoxData[] = [];
 
@@ -32,4 +31,42 @@ export function makeInitialState(cols: number, rows: number): BoxData[][] {
   }
 
   return rowArr;
+}
+
+export type ACTIONTYPE =
+  | { type: 'init'; payload: { rows: number; cols: number } }
+  | { type: 'setLine'; payload: { lineId: number } };
+
+export type STATE = {
+  gameField: BoxData[][];
+  activeLines: number[];
+  playerLines: {
+    p1: number[];
+    p2: number[];
+  };
+  currentPlayer: 'p1' | 'p2';
+};
+
+export function reducer(state: STATE, action: ACTIONTYPE): STATE {
+  switch (action.type) {
+    case 'init':
+      return {
+        ...state,
+        gameField: makeGameField(action.payload.rows, action.payload.cols),
+      };
+    case 'setLine': {
+      const { lineId } = action.payload;
+      return {
+        ...state,
+        activeLines: state.activeLines.concat([lineId]),
+        playerLines: {
+          ...state.playerLines,
+          [state.currentPlayer]: [...state.playerLines[state.currentPlayer], lineId],
+        },
+        currentPlayer: state.currentPlayer === 'p1' ? 'p2' : 'p1',
+      };
+    }
+    default:
+      throw new Error('Dispatched unknown state');
+  }
 }

@@ -1,28 +1,77 @@
+import { useEffect, useReducer } from 'react';
 import './App.css';
-import { BoxData, makeInitialState } from './state';
+import { BoxData, ACTIONTYPE, reducer, STATE } from './state';
 
 const BOXSIZE = 80;
-const LINEWIDTH = 2;
+const LINEWIDTH = 10;
 
-const Box: React.FC<{ col: number; row: number; data: BoxData }> = ({
-  col,
-  row,
-  data,
-}) => {
+const Box: React.FC<{
+  col: number;
+  data: BoxData;
+  dispatch: React.Dispatch<ACTIONTYPE>;
+  activeLines: STATE['activeLines'];
+  playerLines: STATE['playerLines'];
+}> = ({ col, data, dispatch, activeLines, playerLines }) => {
   const left = col * (BOXSIZE - LINEWIDTH);
-  const sideOpacity = col === 0 ? 100 : 0;
-  const topOpacity = row > 0 ? 0 : 100;
+
+  const boxActiveLines = activeLines.filter((id: number) =>
+    Object.values(data).includes(id),
+  );
+
+  const lineActive = (lineId: number) => boxActiveLines.includes(lineId);
+
+  const boxWonBy = () => {
+    const p1 =
+      playerLines.p1.filter((id: number) => Object.values(data).includes(id)).length ===
+      4;
+    const p2 =
+      playerLines.p2.filter((id: number) => Object.values(data).includes(id)).length ===
+      4;
+
+    if (p1) {
+      return 'p1';
+    }
+
+    if (p2) {
+      return 'p2';
+    }
+
+    return;
+  };
+
+  const playerClass = (lineId: number) => {
+    if (lineActive(lineId)) {
+      return playerLines.p1.includes(lineId) ? 'p1' : 'p2';
+    }
+    return 'line';
+  };
+
+  const handleLineClick = (lineId: number) => {
+    if (boxActiveLines.includes(lineId)) {
+      return;
+    }
+    dispatch({ type: 'setLine', payload: { lineId } });
+  };
 
   return (
-    <div className="box" style={{ left }}>
+    <div className={`box ${boxWonBy()}`} style={{ left }}>
       <div
-        className="side line"
-        style={{ opacity: sideOpacity, zIndex: sideOpacity }}
-        onClick={() => console.log(data.left)}
+        className={`side ${playerClass(data.left)}`}
+        onClick={() => handleLineClick(data.left)}
       />
-      <div className="side line" onClick={() => console.log(data.right)} />
-      <div className="top line" style={{ opacity: topOpacity, zIndex: topOpacity }} />
-      <div className="bottom line" />
+      <div
+        className={`side ${playerClass(data.right)}`}
+        onClick={() => handleLineClick(data.right)}
+      />
+      <div
+        className={`top ${playerClass(data.top)}`}
+        onClick={() => handleLineClick(data.top)}
+      />
+      <div
+        className={`bottom ${playerClass(data.bottom)}`}
+        onClick={() => handleLineClick(data.bottom)}
+      />
+
       <div className="circle" style={{ top: '-4px', left: '-4px' }} />
       <div className="circle" style={{ top: '-4px', right: '-4px' }} />
       <div className="circle" style={{ bottom: '-4px', right: '-4px' }} />
@@ -44,15 +93,35 @@ function App() {
 
   const width = BOXSIZE * cols;
   const height = BOXSIZE * cols;
-  const rowArr = makeInitialState(cols, rows);
+
+  const initialState: STATE = {
+    gameField: [],
+    activeLines: [],
+    playerLines: {
+      p1: [],
+      p2: [],
+    },
+    currentPlayer: 'p1',
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => dispatch({ type: 'init', payload: { rows, cols } }), []);
 
   return (
     <div className="App">
       <div className="gameArea" style={{ width, height }}>
-        {rowArr.map((col, rowIndex) => (
+        {state.gameField.map((col, rowIndex) => (
           <Row key={rowIndex} row={rowIndex} cols={cols}>
             {col.map((boxData, colIndex) => (
-              <Box key={colIndex} data={boxData} col={colIndex} row={rowIndex} />
+              <Box
+                key={colIndex}
+                data={boxData}
+                col={colIndex}
+                dispatch={dispatch}
+                activeLines={state.activeLines}
+                playerLines={state.playerLines}
+              />
             ))}
           </Row>
         ))}
