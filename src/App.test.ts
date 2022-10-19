@@ -1,9 +1,10 @@
-import { makeGameField } from './state';
+import { makeGameField } from './App';
 import { it, expect } from 'vitest';
 
 it('generates valid 2x2 initial state', () => {
-  const rowArr = makeGameField(2, 2);
+  const [rowArr, lineArr] = makeGameField(2, 2);
 
+  expect(lineArr.length).toBe(rowArr[1][1].bottom + 1);
   expect(rowArr.length).toBe(2);
   expect(rowArr[0].length).toBe(2);
   expect(rowArr[1].length).toBe(2);
@@ -35,8 +36,9 @@ it('generates valid 2x2 initial state', () => {
 });
 
 it('generates valid 3x3 initial state', () => {
-  const rowArr = makeGameField(3, 3);
+  const [rowArr, lineArr] = makeGameField(3, 3);
 
+  expect(lineArr.length).toBe(rowArr[2][2].bottom + 1);
   expect(rowArr.length).toBe(3);
   expect(rowArr[0].length).toBe(3);
   expect(rowArr[2].length).toBe(3);

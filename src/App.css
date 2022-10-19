@@ -10,11 +10,16 @@
 
 .App {
   display: flex;
+  flex-direction: column;
   background-color: var(--primary);
   justify-content: center;
   place-items: center;
   height: 100vh;
   width: 100vw;
+}
+
+.scoreBoard {
+  font-size: 2rem;
 }
 
 .gameArea {
