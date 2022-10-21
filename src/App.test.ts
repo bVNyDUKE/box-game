@@ -2,75 +2,91 @@ import { makeGameField } from './App';
 import { it, expect } from 'vitest';
 
 it('generates valid 2x2 initial state', () => {
-  const [rowArr, lineArr] = makeGameField(2, 2);
+  const rowArr = makeGameField(2, 2);
 
-  expect(lineArr.length).toBe(rowArr[1][1].bottom + 1);
   expect(rowArr.length).toBe(2);
   expect(rowArr[0].length).toBe(2);
   expect(rowArr[1].length).toBe(2);
 
   expect(rowArr[0][0]).toEqual({
-    top: 0,
-    right: 1,
-    bottom: 2,
-    left: 3,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 0, player: null },
+    right: { id: 1, player: null },
+    bottom: { id: 2, player: null },
+    left: { id: 3, player: null },
   });
   expect(rowArr[0][1]).toEqual({
-    top: 4,
-    right: 5,
-    bottom: 6,
-    left: 1,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 4, player: null },
+    right: { id: 5, player: null },
+    bottom: { id: 6, player: null },
+    left: { id: 1, player: null },
   });
   expect(rowArr[1][0]).toEqual({
-    top: 2,
-    right: 7,
-    bottom: 8,
-    left: 9,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 2, player: null },
+    right: { id: 7, player: null },
+    bottom: { id: 8, player: null },
+    left: { id: 9, player: null },
   });
   expect(rowArr[1][1]).toEqual({
-    top: 6,
-    right: 10,
-    bottom: 11,
-    left: 7,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 6, player: null },
+    right: { id: 10, player: null },
+    bottom: { id: 11, player: null },
+    left: { id: 7, player: null },
   });
 });
 
 it('generates valid 3x3 initial state', () => {
-  const [rowArr, lineArr] = makeGameField(3, 3);
+  const rowArr = makeGameField(3, 3);
 
-  expect(lineArr.length).toBe(rowArr[2][2].bottom + 1);
   expect(rowArr.length).toBe(3);
   expect(rowArr[0].length).toBe(3);
   expect(rowArr[2].length).toBe(3);
 
   expect(rowArr[0][0]).toEqual({
-    top: 0,
-    right: 1,
-    bottom: 2,
-    left: 3,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 0, player: null },
+    right: { id: 1, player: null },
+    bottom: { id: 2, player: null },
+    left: { id: 3, player: null },
   });
   expect(rowArr[0][1]).toEqual({
-    top: 4,
-    right: 5,
-    bottom: 6,
-    left: 1,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 4, player: null },
+    right: { id: 5, player: null },
+    bottom: { id: 6, player: null },
+    left: { id: 1, player: null },
   });
   expect(rowArr[0][2]).toEqual({
-    top: 7,
-    right: 8,
-    bottom: 9,
-    left: 5,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 7, player: null },
+    right: { id: 8, player: null },
+    bottom: { id: 9, player: null },
+    left: { id: 5, player: null },
   });
   expect(rowArr[1][0]).toEqual({
-    top: 2,
-    right: 10,
-    bottom: 11,
-    left: 12,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 2, player: null },
+    right: { id: 10, player: null },
+    bottom: { id: 11, player: null },
+    left: { id: 12, player: null },
   });
   expect(rowArr[2][2]).toEqual({
-    top: 16,
-    right: 22,
-    bottom: 23,
-    left: 20,
+    activeLines: 0,
+    lastPlayer: null,
+    top: { id: 16, player: null },
+    right: { id: 22, player: null },
+    bottom: { id: 23, player: null },
+    left: { id: 20, player: null },
   });
 });

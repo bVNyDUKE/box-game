@@ -20,7 +20,7 @@ type BoxData = {
   lastPlayer: Players;
 };
 
-function makeGameField(cols: number, rows: number): BoxData[][] {
+export function makeGameField(cols: number, rows: number): BoxData[][] {
   const rowArr: BoxData[][] = [];
   let id = 0;
 
