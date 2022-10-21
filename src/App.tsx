@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 const BOXSIZE = 80;
@@ -54,13 +54,10 @@ const Box: React.FC<{
   boxLines: BoxData;
   handleLineClick: (line: Line) => void;
 }> = ({ col, boxLines, handleLineClick }) => {
-  const boxWonBy = useMemo(
-    () => (boxLines.activeLines === 4 ? boxLines.lastPlayer : ''),
-    [boxLines],
-  );
+  const boxWonBy = boxLines.activeLines === 4 ? boxLines.lastPlayer : '';
 
   const playerClass = (line: Line) => {
-    return boxWonBy !== '' ? boxWonBy : line.player || 'line';
+    return line.player ? 'won' : 'line';
   };
 
   const onLineClick = (line: Line) => {
@@ -119,9 +116,9 @@ function App() {
   const [gameField, setGameField] = useState(makeGameField(cols, rows));
   const [currentPlayer, setCurrentPlayer] = useState<'p1' | 'p2'>('p1');
   const [points, setPoints] = useState<{ p1: number; p2: number }>({ p1: 0, p2: 0 });
-  const boxWon = useRef(false);
 
   const directions = ['top', 'right', 'bottom', 'left'] as const;
+  let boxWon = false;
   const handleLineClick = (line: Line) => {
     setGameField((prev) => {
       return prev.map((row) =>
@@ -136,7 +133,7 @@ function App() {
                 lastPlayer: currentPlayer,
               };
               if (newBox.activeLines === 4) {
-                boxWon.current = true;
+                boxWon = true;
               }
             }
           });
@@ -145,12 +142,10 @@ function App() {
       );
     });
 
-    if (boxWon.current) {
-      setPoints((prev) => ({ ...prev, [currentPlayer]: prev[currentPlayer] + 1 }));
-      boxWon.current = false;
-      return;
-    }
-    setCurrentPlayer((prev) => (prev === 'p1' ? 'p2' : 'p1'));
+    setPoints((prev) =>
+      boxWon ? { ...prev, [currentPlayer]: prev[currentPlayer] + 1 } : prev,
+    );
+    setCurrentPlayer((prev) => (boxWon ? prev : prev === 'p1' ? 'p2' : 'p1'));
   };
 
   return (

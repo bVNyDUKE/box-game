@@ -4,6 +4,7 @@
   --p1-color: rgb(82, 67, 142);
   --p2-color: rgb(67, 142, 82);
   --circle-color: rgb(0, 0, 0);
+  --line-color: rgb(169, 169, 169);
   --line-hover-color: rgb(0, 0, 0, 0.1);
   --line-width: 10px;
 }
@@ -71,6 +72,10 @@
   z-index: 10;
 }
 
+.won {
+  background-color: var(--line-color);
+}
+
 .line:hover {
   background-color: var(--line-hover-color);
   cursor: pointer;
@@ -82,7 +87,7 @@
   position: absolute;
   border-radius: 100%;
   background-color: var(--circle-color);
-  z-index: 100;
+  z-index: 5;
 }
 
 .top-left {
